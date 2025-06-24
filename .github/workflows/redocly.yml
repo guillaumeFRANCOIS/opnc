@@ -29,6 +29,8 @@ jobs:
 
       - name: Generate docs for all APIs
         run: |
+          set +e  # Disable immediate exit on error
+          
           declare -A specs
           specs["ccp"]="specification/apis/ccp/ccp.api.v1.json"
           specs["cps"]="specification/apis/cps/cps.api.v1.json"
