@@ -44,18 +44,23 @@ jobs:
             mkdir -p "docs/$api"
           
             echo "🔧 Bundling $api..."
-            if npx redocly bundle "$spec_path" -o "docs/$api/$api.api.v1.json" 2> "failed_logs/${api}_bundle.log"; then
-              echo "✅ Bundled $api"
+            # Capture stderr from bundling
+            BUNDLE_ERR=$(npx redocly bundle "$spec_path" -o "docs/$api/$api.api.v1.json" 2>&1)
+            if [ $? -ne 0 ]; then
+            echo "::warning::❌ Failed to bundle $api:\n$BUNDLE_ERR"
+            continue
             else
-              echo "⚠️ Failed to bundle $api — skipping docs"
-              continue
+            echo "✅ Bundled $api"
             fi
-          
+      
             echo "📘 Building docs for $api..."
-            if npx redocly build-docs "docs/$api/$api.api.v1.json" -o "docs/$api/index.html" 2>> "failed_logs/${api}_build.log"; then
-              echo "✅ Docs generated for $api"
+      
+            # Capture stderr from doc generation
+            DOCS_ERR=$(npx redocly build-docs "docs/$api/$api.api.v1.json" -o "docs/$api/index.html" 2>&1)
+            if [ $? -ne 0 ]; then
+            echo "::warning::⚠️ Failed to generate docs for $api:\n$DOCS_ERR"
             else
-              echo "⚠️ Failed to generate docs for $api"
+            echo "✅ Docs generated for $api"
             fi
           done
 
