@@ -13,7 +13,7 @@
     "get": {
         "summary": "LookUpVehicleByPCID",
         "operationId": "lookupVehicleV1",
-        "description": "Check if there is a provisioning certificate for a vehicle stored in the PCP based on PCID.",
+        "description": "OESH Check if there is a provisioning certificate for a vehicle stored in the PCP based on PCID.",
         "tags": [
             "LookUpVehicle"
         ],
